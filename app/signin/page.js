@@ -3,6 +3,7 @@ import { useAuth } from "@/components/AuthContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import AuthLink from "@/components/AuthLink";
+import styles from "./SignInPage.module.css";
 
 export default function SignInPage() {
   const { user, supabase } = useAuth();
@@ -32,32 +33,51 @@ export default function SignInPage() {
   };
 
   return (
-    <div>
-      <h2>Connexion</h2>
-      <form onSubmit={handleSignIn}>
-        <div>
-          <label>Email :</label>
-          <input
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Mot de passe :</label>
-          <input
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit">Se connecter</button>
-      </form>
-
-      <AuthLink href="/signup" text="Pas encore inscrit ? Créez un compte" />
+    <div className={styles.container}>
+      <div className={styles.formWrapper}>
+        <h2 className={styles.title}>Connexion</h2>
+        <form onSubmit={handleSignIn}>
+          <div className={styles.inputGroup}>
+            <label htmlFor="email" className={styles.label}>
+              Email :
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              className={styles.input}
+              autoComplete="email"
+            />
+          </div>
+          <div className={styles.inputGroup}>
+            <label htmlFor="password" className={styles.label}>
+              Mot de passe :
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              className={styles.input}
+              autoComplete="current-password" /* "new-password" pour le signup */
+            />
+          </div>
+          {error && <p className={styles.error}>{error}</p>}
+          <button type="submit" className={styles.button}>
+            Se connecter
+          </button>
+        </form>
+        <AuthLink
+          href="/signup"
+          text="Pas encore inscrit ? Créez un compte"
+          className={styles.authLink}
+        />
+      </div>
     </div>
   );
 }
