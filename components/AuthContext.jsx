@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "../supabase";
+import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 
 const AuthContext = createContext();
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
 
       if (event === "SIGNED_OUT") {
         console.log("User signed out, redirecting to /signin");
-        router.push("/signin");
+        router.push("/");
       }
     });
 

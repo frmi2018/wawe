@@ -1,24 +1,15 @@
 "use client";
 import { useAuth } from "@/components/AuthContext";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import AuthLink from "@/components/AuthLink";
-import styles from "./SignInPage.module.css";
+import { useState } from "react";
+import styles from "./SignInForm.module.css";
 
-export default function SignInPage() {
-  const { user, supabase } = useAuth();
-  const router = useRouter();
+export default function SignInForm({ setMode }) {
+  const { supabase } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (user) {
-      router.push("/");
-    }
-  }, [user, router]);
-
-  const handleSignIn = async e => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -27,13 +18,10 @@ export default function SignInPage() {
       password,
     });
 
-    if (error) {
-      setError(error.message);
-    }
+   (error) ? setError(error.message) : setMode("");
   };
 
   return (
-    <div className={styles.container}>
       <div className={styles.formWrapper}>
         <h2 className={styles.title}>Connexion</h2>
         <form onSubmit={handleSignIn}>
@@ -43,10 +31,9 @@ export default function SignInPage() {
             </label>
             <input
               id="email"
-              name="email"
               type="email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className={styles.input}
               autoComplete="email"
@@ -58,13 +45,12 @@ export default function SignInPage() {
             </label>
             <input
               id="password"
-              name="password"
               type="password"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
               className={styles.input}
-              autoComplete="current-password" /* "new-password" pour le signup */
+              autoComplete="current-password"
             />
           </div>
           {error && <p className={styles.error}>{error}</p>}
@@ -72,12 +58,6 @@ export default function SignInPage() {
             Se connecter
           </button>
         </form>
-        <AuthLink
-          href="/signup"
-          text="Pas encore inscrit ? Créez un compte"
-          className={styles.authLink}
-        />
       </div>
-    </div>
   );
 }
