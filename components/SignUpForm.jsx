@@ -70,10 +70,16 @@ export default function SignInForm({ setMode }) {
           <button type="submit" className={styles.button}>
             Se connecter
           </button>
+                <p style={{ textAlign:"center" }}>
+          Pas encore inscrit ?{" "}
+          <span
+            style={{ cursor: "pointer", color: "#0070f3" }}
+            onClick={() => setMode("signin")}
+          >
+            Créez un compte
+          </span>
+        </p>
         </form>
-  <a className={styles.link} onClick={() => setMode("signup")}>
-    Pas encore inscrit ? Créez un compte
-  </a>
       </div>
   );
 }

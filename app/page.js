@@ -1,30 +1,27 @@
 "use client";
 import { useAuth } from "@/components/AuthContext";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 import styles from "./page.module.css";
-import SignInForm from "@/components/SignUpForm";
-import SignUpForm from "@/components/SignInForm";
+import SignInForm from "@/components/SignInForm"; // attention, tu avais inversé SignInForm et SignUpForm dans ton import
+import SignUpForm from "@/components/SignUpForm";
 import SignOutButton from "@/components/SignOutButton";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
   const { user, loading } = useAuth();
-  const router = useRouter();
   const [recipes, setRecipes] = useState([]);
-  const [mode, setMode] = useState();
+  const [mode, setMode] = useState("signin"); // "signin" ou "signup"
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      if (!user) {
-        setMode("signin");
-        return;
-      }
+    if (!user) {
+      setRecipes([]);
+      return;
+    }
 
-      console.log("Chargement des recettes...");
+    const fetchRecipes = async () => {
       const { data, error } = await supabase
         .from("recipes")
         .select("*")
@@ -49,55 +46,41 @@ export default function HomePage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          backgroundColor: "#0A0A0A",
+          padding: "8px",
         }}
       >
-        <div
-          style={{
-            backgroundColor: "#0A0A0A",
-          }}
-        >
-          <Link href="/">
-            <Image
-              src="/images/logo.png"
-              alt="Logo"
-              width={100}
-              height={100}
-              priority
-            />
-          </Link>
-        </div>
+        <Link href="/">
+          <Image
+            src="/images/logo.png"
+            alt="Logo"
+            width={100}
+            height={100}
+            priority
+          />
+        </Link>
 
-        {user && (
-          <div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                gap: "10px",
-                padding: "8px",
-                alignItems: "center",
-              }}
-            >
-              <Link href="/">
-                <Image
-                  src="/images/icons8-caddie-50.png"
-                  alt="Caddie"
-                  width={50}
-                  height={50}
-                />
-              </Link>
-              <Link href="/">
-                <Image
-                  src="/images/icons8-utilisateur-48.png"
-                  alt="Utilisateur"
-                  width={50}
-                  height={50}
-                />
-              </Link>
-              <SignOutButton onClick={() => setMode("signin")} />
-            </div>
+        {user ? (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <Link href="/">
+              <Image
+                src="/images/icons8-caddie-50.png"
+                alt="Caddie"
+                width={50}
+                height={50}
+              />
+            </Link>
+            <Link href="/">
+              <Image
+                src="/images/icons8-utilisateur-48.png"
+                alt="Utilisateur"
+                width={50}
+                height={50}
+              />
+            </Link>
+            <SignOutButton />
           </div>
-        )}
+        ) : null}
       </div>
     );
   };
@@ -106,41 +89,39 @@ export default function HomePage() {
     return <p>Chargement des informations utilisateur...</p>;
   }
 
-  if (mode === "signin") {
+  if (!user) {
     return (
       <div className={styles.container}>
-        <SignInForm setMode={setMode} />
+        {mode === "signin" ? (
+          <SignInForm setMode={setMode} />
+        ) : (
+          <SignUpForm setMode={setMode} />
+        )}
       </div>
     );
   }
 
-  if (mode === "signup") {
-    return (
-      <div className={styles.container}>
-        <SignUpForm setMode={setMode} />
-      </div>
-    );
-  }
-
+  // Si user connecté, afficher recettes + déconnexion
   return (
     <>
+      {/* <div style={{ padding: "10px" }}>
+        <SignOutButton />
+      </div> */}
+
       <NavBar />
+
       <div className={styles.container}>
-        <h1>Bienvenue, {user?.email || "Visiteur"} !</h1>
-        {user ? (
-          <>
-            <h2>Vos recettes :</h2>
-            {recipes.length > 0 ? (
-              <ul>
-                {recipes.map(recipe => (
-                  <li key={recipe.id}>{recipe.nom}</li>
-                ))}
-              </ul>
-            ) : (
-              <p>Aucune recette disponible.</p>
-            )}
-          </>
-        ) : null}
+        <h1>Bienvenue, {user.email} !</h1>
+        <h2>Vos recettes :</h2>
+        {recipes.length > 0 ? (
+          <ul>
+            {recipes.map(recipe => (
+              <li key={recipe.id}>{recipe.nom}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>Aucune recette disponible.</p>
+        )}
       </div>
     </>
   );
