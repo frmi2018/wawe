@@ -82,3 +82,17 @@
 .authLink:hover {
   text-decoration: underline;
 }
+
+.link {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  color: #0070f3;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.3s;
+}
+
+.link:hover {
+  color: #0056b3;
+}

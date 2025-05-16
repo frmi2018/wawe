@@ -2,6 +2,7 @@
 import { useAuth } from "@/components/AuthContext";
 import { useState } from "react";
 import styles from "./SignUpForm.module.css";
+import Image from "next/image";
 
 export default function SignUpForm({  setMode }) {
   const { supabase } = useAuth();
@@ -23,6 +24,18 @@ export default function SignUpForm({  setMode }) {
 
   return (
       <div className={styles.formWrapper}>
+        <div        style={{
+          textAlign:"center"
+        }}>
+                    <Image
+                      src="/images/logo.png"
+                      alt="Logo"
+                      width={100}
+                      height={100}
+                      priority
+                    />
+        </div>
+
         <h2 className={styles.title}>Inscription</h2>
         <form onSubmit={handleSignUp}>
           <div className={styles.inputGroup}>
@@ -58,6 +71,9 @@ export default function SignUpForm({  setMode }) {
             Créer un compte
           </button>
         </form>
+  <a className={styles.link} onClick={() => setMode("signin")}>
+    Déjà inscrit ? Connectez-vous
+  </a>
       </div>
   );
 }

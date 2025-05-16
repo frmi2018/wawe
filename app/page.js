@@ -2,13 +2,14 @@
 import { useAuth } from "@/components/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import SignOutButton from "@/components/SignOutButton";
 import { supabase } from "@/lib/supabase";
-import Image from "next/image";
-import Link from "next/link";
+
 import styles from "./page.module.css";
 import SignInForm from "@/components/SignUpForm";
 import SignUpForm from "@/components/SignInForm";
+import SignOutButton from "@/components/SignOutButton";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function HomePage() {
   const { user, loading } = useAuth();
@@ -107,29 +108,17 @@ export default function HomePage() {
 
   if (mode === "signin") {
     return (
-      <>
-        <NavBar />
-        <div className={styles.container}>
-          <SignInForm setMode={setMode} />
-          <button onClick={() => setMode("signup")}>
-            Pas encore inscrit ? Créez un compte
-          </button>
-        </div>
-      </>
+      <div className={styles.container}>
+        <SignInForm setMode={setMode} />
+      </div>
     );
   }
 
   if (mode === "signup") {
     return (
-      <>
-        <NavBar />
-        <div className={styles.container}>
-          <SignUpForm setMode={setMode} />
-          <button onClick={() => setMode("signin")}>
-            Déjà inscrit ? Connectez-vous
-          </button>
-        </div>
-      </>
+      <div className={styles.container}>
+        <SignUpForm setMode={setMode} />
+      </div>
     );
   }
 

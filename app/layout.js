@@ -1,4 +1,4 @@
-import "./globals.css";
+// import "./globals.css";
 import { AuthProvider } from "@/components/AuthContext";
 
 export const metadata = {
@@ -9,7 +9,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+      </head>
+      <body suppressHydrationWarning={true}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
